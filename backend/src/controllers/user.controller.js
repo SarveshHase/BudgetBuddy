@@ -1,5 +1,5 @@
-import { User } from "../models/user.model";
-import { asyncHandler } from "../utils/asyncHandler";
+import { User } from "../models/user.model.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js"
 import { ApiError } from "../utils/apiError.js";
 import { ApiResponse } from "../utils/apiResponse.js";
@@ -52,7 +52,7 @@ export const registerUser = asyncHandler(async (req, res) => {
         .json(new ApiResponse(200, createdUser, "User registered sucessfully"));
 });
 
-const loginUser = asyncHandler(async (req, res) => {
+export const loginUser = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
 
     if (!email) throw new ApiError(400, "Email required");
@@ -206,7 +206,7 @@ export const refreshAcessToken = asyncHandler(async (req, res) => {
         );
 });
 
-export const initialExpense = asyncHandler(async (req, res) => {
+export const initialDeposit = asyncHandler(async (req, res) => {
     const user = req.user;
     const { depositAmount } = req.body;
 
@@ -315,39 +315,34 @@ export const uploadAvatar = asyncHandler(async (req, res) => {
 
     if (!avatar) throw new ApiError(400, "Avatar file is required");
 
-    const updatedUser = await User.findByIdAndUpdate(user._id,
-        {
-            avatar: avatar.url,
-        },
-        {
-            new: true
-        }
-    ).select("-password -refreshToken");
+    const updatedUser = await User.findByIdAndUpdate(user._id, {
+        avatar: avatar.url,
+    }, {
+        new: true
+    }).select("-password -refreshToken");
 
-    if (!updatedUser)
-        throw new ApiError(500, "Something went wrong uploading avatar");
+    if (!updatedUser) throw new ApiError(500, "Something went wrong uploading avatar");
 
-    return res
-        .status(200)
-        .json(
-            new ApiResponse(200, { user: updatedUser }, "Avatar uploaded sucessfully")
-        );
+    return res.status(200).json(
+        new ApiResponse(200, { user: updatedUser }, "Avatar uploaded successfully")
+    );
 });
 
+
 export const changeCurrentPassword = asyncHandler(async (req, res) => {
-    const { oldPassowrd, newPassowrd } = req.body;
+    const { oldPassword, newPassword } = req.body;
 
     if (!oldPassword || !newPassword)
         throw new ApiError(400, "Both old and new passwords are required");
 
     const user = await User.findById(req.user?._id);
-    const isPasswordCorrect = await user.isPasswordCorrect(oldPassowrd);
+    const isPasswordCorrect = await user.isPasswordCorrect(oldPassword);
 
     if (!isPasswordCorrect) {
         throw new ApiError(401, "Invalid old password");
     }
 
-    user.password = newPassowrd;
+    user.password = newPassword;
     user.save({ validateBeforeSave: false });
 
     return res

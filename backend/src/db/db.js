@@ -1,9 +1,10 @@
 import mongoose from "mongoose";
+import { DB_NAME } from "../constants.js";
 
 async function connectDB() {
     try {
         const connectionInstance = await mongoose.connect(
-            `${process.env.MONGO_URL} / ${process.env.DB_NAME}`,
+            `${process.env.MONGO_URL}/${DB_NAME}`,
             {
                 writeConcern: { w: "majority" },
             },
