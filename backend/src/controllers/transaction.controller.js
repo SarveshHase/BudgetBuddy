@@ -171,14 +171,14 @@ export const deleteTransaction = asyncHandler(async (req, res) => {
         .json(new ApiResponse(200, { user }, "Transaction deleted successfully"));
 });
 
-export const recentTransactions = asyncHandler(async(req, res) => {
+export const recentTransactions = asyncHandler(async (req, res) => {
     const userTransactions = req.user.transactionHistory;
 
     if (!userTransactions || userTransactions.length === 0)
         throw new ApiError(404, "User doesn't have any transactions");
 
     const transactions = await Transaction.find({
-        _id: {$in: userTransactions}
+        _id: { $in: userTransactions }
     });
 
     const recentTransaction = transactions.reverse().slice(0, 5);
