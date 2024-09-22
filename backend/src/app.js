@@ -24,10 +24,14 @@ import userRouter from "./routes/user.route.js"
 import transactionRouter from "./routes/transaction.route.js"
 import goalRouter from "./routes/goal.route.js"
 import feedbackRouter from "./routes/feedback.route.js"
+import payRouter from "./routes/payment.route.js";
+import statsRouter from "./routes/stats.route.js";
 
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/transaction", transactionRouter);
 app.use("/api/v1/goals", goalRouter);
 app.use("/api/v1/feedback", feedbackRouter);
+app.use("/api/v1/stats", statsRouter);
+app.use("/api/v1/pay", payRouter);
 
 export default app;
