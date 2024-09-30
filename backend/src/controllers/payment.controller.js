@@ -3,7 +3,7 @@ import { asyncHandler } from '../utils/asyncHandler.js';
 import { ApiResponse } from '../utils/apiResponse.js';
 import { ApiError } from '../utils/apiError.js';
 
-const stripe = new Stripe(process.send.STRIPE_PRIVATE_KEY);
+const stripe = new Stripe(process.env.STRIPE_PRIVATE_KEY);
 
 export const createCheckout = asyncHandler(async (req, res) => {
     const user = req.user;
