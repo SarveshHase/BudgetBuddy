@@ -5,6 +5,7 @@ import { ApiError } from '../utils/apiError.js';
 
 const stripe = new Stripe(process.env.STRIPE_PRIVATE_KEY);
 
+
 export const createCheckout = asyncHandler(async (req, res) => {
     const user = req.user;
 
